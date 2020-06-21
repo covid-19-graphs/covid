@@ -6,6 +6,8 @@ from os.path import isdir, join
 from os import mkdir
 from getpass import getuser
 
+# todo: add metadata for run
+# todo: add latest daily stats
 
 _base_directory = '/users/{user}/projects/covid/data_side/graph_output/{state}/'
 
@@ -17,11 +19,12 @@ def get_directory(directory_path, state, filename):
     return join(directory_path, filename)
 
 
-def subset_state(state):
+def subset_state(state, df):
     # retrieves data from api, subsets by specified state
     state = state.upper()
     print("Running process for {}".format(state))
-    stat = read_csv(r"https://covidtracking.com/api/v1/states/daily.csv")
+    # stat = read_csv(r"https://covidtracking.com/api/v1/states/daily.csv")
+    stat = df.copy()
     if state != 'USA':
         stat = stat[stat['state'] == state].copy()
     else:
@@ -37,17 +40,18 @@ def subset_state(state):
     return stat
 
 
-def plot_state_data(state, roll=7):
+def plot_state_data(state, df, roll=7):
     # plots state data
     state = state.upper()
 
-    stat = subset_state(state)
+    stat = subset_state(state, df)
+    max_date = str(stat['date'].max()).split(" ")[0]
 
     # cumulative cases
     plt.plot(stat['date'], stat['positive'])
     plt.gcf().autofmt_xdate()
     plt.title("Cumulative Cases for {}".format(state))
-    plt.xlabel("Date")
+    plt.xlabel("Date\nThrough {}".format(max_date))
     plt.ylabel("Total Cases")
     figure_name = get_directory(_base_directory, state, '{state}_cumulative_cases.png'.format(state=state))
     plt.savefig(fname=figure_name, format='png')
@@ -57,7 +61,7 @@ def plot_state_data(state, roll=7):
     plt.plot(stat['date'], stat['death'])
     plt.gcf().autofmt_xdate()
     plt.title("Cumulative Deaths for {}".format(state))
-    plt.xlabel("Date")
+    plt.xlabel("Date\nThrough {}".format(max_date))
     plt.ylabel("Total Deaths")
     figure_name = get_directory(_base_directory, state, '{state}_cumulative_deaths.png'.format(state=state))
     plt.savefig(fname=figure_name, format='png')
@@ -67,7 +71,7 @@ def plot_state_data(state, roll=7):
     plt.plot(stat['date'], (stat['positiveIncrease'] / stat['totalTestResultsIncrease']).rolling(roll).mean(), c='g')
     plt.gcf().autofmt_xdate()
     plt.title("{state} Ratio of New Cases to New Tests ({roll}-day rolling mean)".format(state=state, roll=roll))
-    plt.xlabel("Date")
+    plt.xlabel("Date\nThrough {}".format(max_date))
     plt.ylabel("New Case / New Tests")
     figure_name = get_directory(_base_directory, state, '{state}_cases_to_tests_ratio.png'.format(state=state))
     plt.savefig(fname=figure_name, format='png')
@@ -78,7 +82,7 @@ def plot_state_data(state, roll=7):
     plt.plot(stat['date'], stat['positiveIncrease'], c='r', alpha=.25)
     plt.gcf().autofmt_xdate()
     plt.title("{state} New Cases ({roll}-day rolling mean)".format(state=state, roll=roll))
-    plt.xlabel("Date")
+    plt.xlabel("Date\nThrough {}".format(max_date))
     plt.ylabel("New Case")
     figure_name = get_directory(_base_directory, state, '{state}_new_cases_per_day.png'.format(state=state))
     plt.savefig(fname=figure_name, format='png')
@@ -89,7 +93,7 @@ def plot_state_data(state, roll=7):
     plt.plot(stat['date'], stat['totalTestResultsIncrease'], c='b', alpha=.25)
     plt.gcf().autofmt_xdate()
     plt.title("{state} Tests per Day ({roll}-day rolling mean)".format(state=state, roll=roll))
-    plt.xlabel("Date")
+    plt.xlabel("Date\nThrough {}".format(max_date))
     plt.ylabel("Tests per Day")
     figure_name = get_directory(_base_directory, state, '{state}_tests_per_day.png'.format(state=state))
     plt.savefig(fname=figure_name, format='png')
@@ -99,7 +103,7 @@ def plot_state_data(state, roll=7):
     plt.plot(stat['date'], stat['deathIncrease'].rolling(roll).mean(), c='y')
     plt.plot(stat['date'], stat['deathIncrease'], c='y', alpha=.25)
     plt.title("{state} Deaths per (Day {roll}-day rolling mean)".format(state=state, roll=roll))
-    plt.xlabel("Date")
+    plt.xlabel("Date\nThrough {}".format(max_date))
     plt.ylabel("AVG Deaths per Day")
     plt.gcf().autofmt_xdate()
     figure_name = get_directory(_base_directory, state, '{state}_deaths_per_day.png'.format(state=state))
@@ -112,7 +116,7 @@ def plot_state_data(state, roll=7):
     plt.legend(['new cases', 'new tests / 5'])
     plt.gcf().autofmt_xdate()
     plt.title("{state} New Cases and Tests ({roll}-day rolling mean)".format(state=state, roll=roll))
-    plt.xlabel("Date")
+    plt.xlabel("Date\nThrough {}".format(max_date))
     plt.ylabel("New Cases or Tests")
     figure_name = get_directory(_base_directory, state, '{state}_new_tests_and_cases.png'.format(state=state))
     plt.savefig(fname=figure_name, format='png')
@@ -124,7 +128,7 @@ def plot_state_data(state, roll=7):
     plt.legend(['new deaths', 'new cases / 10'])
     plt.gcf().autofmt_xdate()
     plt.title("{state} New Cases and Deaths ({roll}-day rolling mean)".format(state=state, roll=roll))
-    plt.xlabel("Date")
+    plt.xlabel("Date\nThrough {}".format(max_date))
     plt.ylabel("New Cases or Deaths")
     figure_name = get_directory(_base_directory, state, '{state}_new_cases_and_deaths.png'.format(state=state))
     plt.savefig(fname=figure_name, format='png')
@@ -153,20 +157,24 @@ def plot_state_data(state, roll=7):
     plt.legend(['In ICU', 'On Ventilator', 'In Hospital', 'New Cases', 'New Deaths'])
     plt.title("{} Active Case Breakdown".format(state))
     plt.ylabel('Patients in Category')
-    plt.xlabel('Date')
+    plt.xlabel("Date\nThrough {}".format(max_date))
     figure_name = get_directory(_base_directory, state, '{state}_active_cases.png'.format(state=state))
     plt.savefig(fname=figure_name, format='png')
     plt.clf()
 
 
 def run_job():
+    print("Starting at {}".format(datetime.now()))
     state_list = [
         'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY',
         'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH',
         'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'USA'
     ]
+    # get state data
+    all_state_data = read_csv(r"https://covidtracking.com/api/v1/states/daily.csv")
     for state in state_list:
-        plot_state_data(state)
+        plot_state_data(state, all_state_data)
+    print("Finished at {}".format(datetime.now()))
 
 
 if __name__ == '__main__':
