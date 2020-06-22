@@ -3,11 +3,14 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 from matplotlib.dates import date2num
 from os.path import isdir, join
-from os import mkdir
+from os import mkdir, system
 from getpass import getuser
 
 # todo: add metadata for run
 # todo: add latest daily stats
+
+
+_test_mode = False
 
 _base_directory = '/users/{user}/projects/covid/data_side/graph_output/{state}/'
 
@@ -175,6 +178,10 @@ def run_job():
     for state in state_list:
         plot_state_data(state, all_state_data)
     print("Finished at {}".format(datetime.now()))
+    if not _test_mode:
+        system("git add .")
+        system("git commit -m 'automatic daily commit'")
+        system("git push origin master")
 
 
 if __name__ == '__main__':
