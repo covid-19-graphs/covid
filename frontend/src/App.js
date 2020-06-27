@@ -21,14 +21,12 @@ export default function App() {
           </ul>
         </nav>
 
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/about">
-            <About />
-          </Route>
           <Route path="/">
             <Home />
+          </Route>
+          <Route path="/about">
+            <About />
           </Route>
         </Switch>
       </div>
