@@ -58,7 +58,7 @@ export default function App() {
         </Switch>
         <br />
         <br />
-        <div style={{ marginTop: 32, marginBottom: 32, textAlign: 'center' }}>Data sourced from <a href="https://covidtracking.com" target="_blank">The COVID Tracking Project at The Atlantic</a> under the <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">Creative Commons License</a>.</div>
+        <div style={{ marginTop: 32, marginBottom: 32, textAlign: 'center' }}>Data sourced from <a href="https://covidtracking.com" target="_blank" rel="noopener noreferrer">The COVID Tracking Project at The Atlantic</a> under the <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons License</a>.</div>
       </div>
     </Router>
   );
@@ -79,12 +79,12 @@ const Header = () => {
     <Toolbar>
       <Link to="/" style={{ textDecoration: 'none' }}>
         <Typography variant="h4">
-          <span>😷</span>
+          <span role="img" aria-label="COVID-19 Data">😷</span>
         </Typography>
       </Link>
       <Link to={`/?query=${search}`} style={{ textDecoration: 'none' }}>
         <SearchButton>
-          🔎
+        <span role="img" aria-label="Search">🔎</span>
         </SearchButton>
       </Link>
       <HeaderInput

@@ -47,11 +47,12 @@ export const Detail = () => {
         </Grid>
         {
           graphs.map((graph) => (
-            <Grid item xs={12} md={6} sm={6} key={state.name}>
+            <Grid item xs={12} md={6} sm={6} key={`$${state}${graph}`}>
               <PaddingPaper>
                 <img
                   src={`images/${stateObject.abbreviation}/${stateObject.abbreviation}${graph}`}
                   style={fullWidth}
+                  alt={`$${state}, ${graph}`}
                 />
               </PaddingPaper>
             </Grid>

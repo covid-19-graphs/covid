@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Button,
   Grid,
   Paper,
   Typography,
@@ -51,6 +50,7 @@ export const List = () => {
                   <img
                     src={`images/${state.abbreviation}/${state.abbreviation}_active_cases.png`}
                     style={fullWidth}
+                    alt="Active Cases"
                   />
                 </PaddingPaper>
               </Link>
