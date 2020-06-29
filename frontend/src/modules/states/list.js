@@ -8,10 +8,15 @@ import {
 } from '@material-ui/core';
 import { styled } from '@material-ui/styles';
 import states from './states.json';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 const PaddingPaper = styled(Paper)({
   padding: 12,
+  cursor: 'pointer',
+  transition: 'transform 0.1s',
+  '&:hover': {
+    transform: 'translateY(-4px)',
+  },
 });
 
 const fullWidth = { width: '100%' };
@@ -28,8 +33,6 @@ export const List = () => {
     return false;
   });
 
-  console.log({ search });
-
   return (
     <Container>
       <br />
@@ -40,15 +43,17 @@ export const List = () => {
         {
           filteredStates.map((state) => (
             <Grid item xs={12} md={4} sm={6} key={state.name}>
-              <PaddingPaper>
-                <Typography>
-                  {state.name}
-                </Typography>
-                <img
-                  src={`images/${state.abbreviation}/${state.abbreviation}_active_cases.png`}
-                  style={fullWidth}
-                />
-              </PaddingPaper>
+              <Link to={`/state/${state.abbreviation}`} style={{ textDecoration: 'none' }}>
+                <PaddingPaper>
+                  <Typography>
+                    {state.name}
+                  </Typography>
+                  <img
+                    src={`images/${state.abbreviation}/${state.abbreviation}_active_cases.png`}
+                    style={fullWidth}
+                  />
+                </PaddingPaper>
+              </Link>
             </Grid>
           ))
         }

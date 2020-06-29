@@ -17,7 +17,7 @@ import {
 } from"@material-ui/core";
 import { styled } from"@material-ui/core";
 
-import { List as StateList } from './modules/states';
+import { List as StateList, Detail } from './modules/states';
 
 const HeaderButton = styled(Button)({
   textDecoration: 'none',
@@ -49,13 +49,16 @@ export default function App() {
           <Route path="/about">
             <About />
           </Route>
+          <Route path="/state/:state">
+            <Detail />
+          </Route>
           <Route path="/">
             <Home />
           </Route>
         </Switch>
         <br />
         <br />
-        <div style={{ marginTop: 32, textAlign: 'center' }}>Data sourced from <a href="https://covidtracking.com" target="_blank">The COVID Tracking Project at The Atlantic</a> under the <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">Creative Commons License</a>.</div>
+        <div style={{ marginTop: 32, marginBottom: 32, textAlign: 'center' }}>Data sourced from <a href="https://covidtracking.com" target="_blank">The COVID Tracking Project at The Atlantic</a> under the <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">Creative Commons License</a>.</div>
       </div>
     </Router>
   );
@@ -72,7 +75,7 @@ const Header = () => {
   }, [history, search]);
 
  return (
-  <AppBar position="static">
+  <AppBar position="sticky">
     <Toolbar>
       <Link to="/" style={{ textDecoration: 'none' }}>
         <Typography variant="h4">
@@ -116,7 +119,12 @@ function About() {
           </Typography>
         </Grid>
         <Grid item xs={12} md={8}>
-          This project was created to provide context to conversations surrounding COVID-19 in the United States.
+          <Typography variant="body1">
+            This project was created to provide context to conversations surrounding COVID-19 in the United States.
+          </Typography>
+          <Typography variant="body1">
+            All data is updated daily.
+          </Typography>
         </Grid>
         <Grid item xs={12} md={4}>
           <Typography variant="h6">
