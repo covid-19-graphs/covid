@@ -19,7 +19,7 @@
     "build": "yarn copyImages && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "copyImages": "cp -r ../data_side/graph_output/ public/images"
+    "copyImages": "cp -r data_side/graph_output/ public/images"
   },
   "eslintConfig": {
     "extends": "react-app"
