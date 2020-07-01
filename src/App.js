@@ -17,7 +17,7 @@ import {
 } from"@material-ui/core";
 import { styled } from"@material-ui/core";
 
-import { List as StateList, Detail } from './modules/states';
+import { List as StateList, Detail, Graph } from './modules/states';
 
 const HeaderButton = styled(Button)({
   textDecoration: 'none',
@@ -48,6 +48,9 @@ export default function App() {
         <Switch>
           <Route path="/about">
             <About />
+          </Route>
+          <Route path="/state/:state/:graph">
+            <Graph />
           </Route>
           <Route path="/state/:state">
             <Detail />

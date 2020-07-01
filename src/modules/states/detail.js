@@ -8,10 +8,11 @@ import {
 } from '@material-ui/core';
 import { styled } from '@material-ui/styles';
 import states from './states.json';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 
 const PaddingPaper = styled(Paper)({
   padding: 12,
+  cursor: 'pointer',
 });
 
 const fullWidth = { width: '100%' };
@@ -48,13 +49,15 @@ export const Detail = () => {
         {
           graphs.map((graph) => (
             <Grid item xs={12} md={6} sm={6} key={`$${state}${graph}`}>
-              <PaddingPaper>
-                <img
-                  src={`images/${stateObject.abbreviation}/${stateObject.abbreviation}${graph}`}
-                  style={fullWidth}
-                  alt={`$${state}, ${graph}`}
-                />
-              </PaddingPaper>
+              <Link to={`/state/${state}/${graph}`} style={{ textDecoration: 'none' }}>
+                <PaddingPaper>
+                  <img
+                    src={`images/${stateObject.abbreviation}/${stateObject.abbreviation}${graph}`}
+                    style={fullWidth}
+                    alt={`$${state}, ${graph}`}
+                  />
+                </PaddingPaper>
+              </Link>
             </Grid>
           ))
         }
