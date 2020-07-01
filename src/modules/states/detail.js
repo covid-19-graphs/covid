@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import { styled } from '@material-ui/styles';
 import states from './states.json';
-import { useParams, Link, useHistory } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 const PaddingPaper = styled(Paper)({
   padding: 12,
