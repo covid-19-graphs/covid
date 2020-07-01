@@ -12,6 +12,7 @@ import { useParams, Link } from 'react-router-dom';
 
 const PaddingPaper = styled(Paper)({
   padding: 12,
+  cursor: 'pointer',
 });
 
 const fullWidth = { width: '100%' };
@@ -39,7 +40,7 @@ export const Detail = () => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Link to="/" style={{ textDecoration: 'none' }}>
-            <Button>Back</Button>
+            <Button variant="outlined" color="primary">All States</Button>
           </Link>
         </Grid>
         <Grid item xs={12}>
@@ -48,13 +49,15 @@ export const Detail = () => {
         {
           graphs.map((graph) => (
             <Grid item xs={12} md={6} sm={6} key={`$${state}${graph}`}>
-              <PaddingPaper>
-                <img
-                  src={`images/${stateObject.abbreviation}/${stateObject.abbreviation}${graph}`}
-                  style={fullWidth}
-                  alt={`$${state}, ${graph}`}
-                />
-              </PaddingPaper>
+              <Link to={`/state/${state}/${graph}`} style={{ textDecoration: 'none' }}>
+                <PaddingPaper>
+                  <img
+                    src={`images/${stateObject.abbreviation}/${stateObject.abbreviation}${graph}`}
+                    style={fullWidth}
+                    alt={`$${state}, ${graph}`}
+                  />
+                </PaddingPaper>
+              </Link>
             </Grid>
           ))
         }

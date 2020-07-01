@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -17,7 +17,7 @@ import {
 } from"@material-ui/core";
 import { styled } from"@material-ui/core";
 
-import { List as StateList, Detail } from './modules/states';
+import { List as StateList, Detail, Graph } from './modules/states';
 
 const HeaderButton = styled(Button)({
   textDecoration: 'none',
@@ -49,6 +49,9 @@ export default function App() {
           <Route path="/about">
             <About />
           </Route>
+          <Route path="/state/:state/:graph">
+            <Graph />
+          </Route>
           <Route path="/state/:state">
             <Detail />
           </Route>
@@ -73,6 +76,8 @@ const Header = () => {
       history.push(`/?query=${search}`);
     }
   }, [history, search]);
+
+  useEffect(() => window.scrollTo(0,0));
 
  return (
   <AppBar position="sticky">
@@ -121,9 +126,6 @@ function About() {
         <Grid item xs={12} md={8}>
           <Typography variant="body1">
             This project was created to provide context to conversations surrounding COVID-19 in the United States.
-          </Typography>
-          <Typography variant="body1">
-            All data is updated daily.
           </Typography>
         </Grid>
         <Grid item xs={12} md={4}>
