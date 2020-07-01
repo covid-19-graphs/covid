@@ -125,9 +125,6 @@ function About() {
           <Typography variant="body1">
             This project was created to provide context to conversations surrounding COVID-19 in the United States.
           </Typography>
-          <Typography variant="body1">
-            All data is updated daily.
-          </Typography>
         </Grid>
         <Grid item xs={12} md={4}>
           <Typography variant="h6">
