@@ -40,7 +40,7 @@ export const Detail = () => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Link to="/" style={{ textDecoration: 'none' }}>
-            <Button>Back</Button>
+            <Button variant="outlined" color="primary">All States</Button>
           </Link>
         </Grid>
         <Grid item xs={12}>

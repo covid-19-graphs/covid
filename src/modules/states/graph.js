@@ -10,8 +10,10 @@ import states from './states.json';
 import { useParams, Link } from 'react-router-dom';
 
 const PaddingPaper = styled(Paper)({
-  padding: 12,
+  padding: 32,
   cursor: 'pointer',
+  maxWidth: 800,
+  margin: '0 auto',
 });
 
 const fullWidth = { width: '100%' };
@@ -26,11 +28,10 @@ export const Graph = () => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Link to={`/state/${state}`} style={{ textDecoration: 'none' }}>
-            <Button>Back</Button>
+            <Button variant="outlined" color="primary">All States / {state.toUpperCase()}</Button>
           </Link>
         </Grid>
-        <Grid item xs={0} md={2} sm={2} />
-        <Grid item xs={12} md={8} sm={8}>
+        <Grid item xs={12} style={{ alignItems: 'center', justifyContent: 'center' }}>
           <PaddingPaper>
             <img
               src={`images/${stateObject.abbreviation}/${stateObject.abbreviation}${graph}`}

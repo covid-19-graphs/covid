@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -76,6 +76,8 @@ const Header = () => {
       history.push(`/?query=${search}`);
     }
   }, [history, search]);
+
+  useEffect(() => window.scrollTo(0,0));
 
  return (
   <AppBar position="sticky">
