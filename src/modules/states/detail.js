@@ -32,7 +32,8 @@ const graphs = [
 
 export const Detail = () => {
   const { state } = useParams();
-  const stateObject = states.find((({ abbreviation }) => state.toLowerCase() === abbreviation.toLowerCase()));
+  const stateObject = states
+    .find((({ abbreviation }) => state.toLowerCase() === abbreviation.toLowerCase()));
 
   return (
     <Container>
@@ -56,6 +57,7 @@ export const Detail = () => {
                     style={fullWidth}
                     alt={`$${state}, ${graph}`}
                   />
+                  <Button>View Larger</Button>
                 </PaddingPaper>
               </Link>
             </Grid>

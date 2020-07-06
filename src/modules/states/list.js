@@ -4,6 +4,7 @@ import {
   Paper,
   Typography,
   Container,
+  Button,
 } from '@material-ui/core';
 import { styled } from '@material-ui/styles';
 import states from './states.json';
@@ -52,6 +53,9 @@ export const List = () => {
                     style={fullWidth}
                     alt="Active Cases"
                   />
+                  <Button>
+                    See More
+                  </Button>
                 </PaddingPaper>
               </Link>
             </Grid>
