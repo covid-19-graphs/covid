@@ -43,11 +43,27 @@ def subset_state(state, df):
     return stat
 
 
+def data_quality_check(df):
+    today = df.iloc[0]
+    cases = today['positiveIncrease']
+    tests = today['totalTestResultsIncrease']
+    deaths = today['deathIncrease']
+    print(deaths, cases, tests)
+    if deaths == 0 and cases == 0 and tests == 0:
+        print("Latest data is bad. Subsetting.")
+        return df.iloc[1:]
+    else:
+        return df
+
+
 def plot_state_data(state, df, roll=7):
     # plots state data
     state = state.upper()
 
     stat = subset_state(state, df)
+
+    stat = data_quality_check(stat)
+
     max_date = str(stat['date'].max()).split(" ")[0]
 
     # cumulative cases
