@@ -65,6 +65,7 @@ def plot_state_data(state, df, roll=7):
     stat = data_quality_check(stat)
 
     max_date = str(stat['date'].max()).split(" ")[0]
+    print("Latest usable data from: {}".format(max_date))
 
     # cumulative cases
     plt.plot(stat['date'], stat['positive'])
