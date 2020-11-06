@@ -5,6 +5,7 @@ from matplotlib.dates import date2num
 from os.path import isdir, join
 from os import mkdir, system
 from getpass import getuser
+import json
 
 # todo: add metadata for run
 # todo: add latest daily stats
@@ -20,6 +21,27 @@ def get_directory(directory_path, state, filename):
     if not isdir(directory_path):
         mkdir(directory_path)
     return join(directory_path, filename)
+
+
+def get_today_stats(stat, state):
+
+    today = stat.sort_values('date').iloc[-1]
+    today_stats = {
+        'latest_date': "{}".format(today['date']).split(" ")[0],
+        'total_tests': "{}".format(today['positive'].astype(int) + today['negative'].astype(int)),
+        'total_cases': "{}".format(today['positive'].astype(int)),
+        'total_deaths': "{}".format(today['death'].astype(int)),
+        'tests_today': "{}".format(today['totalTestResultsIncrease'].astype(int)),
+        'new_cases_today': "{}".format(today['positiveIncrease'].astype(int)),
+        'ratio_today': "{0:.2f}%".format((today['positiveIncrease'] / today['totalTestResultsIncrease']) * 100),
+        'hospitalized': "{}".format(today['hospitalizedCurrently'].astype(int).astype(str)),
+        'in_icu': "{}".format(today['inIcuCurrently'].astype(int).astype(int)),
+        'on_ventilator': "{}".format(today['onVentilatorCurrently'].astype(int)),
+        'deaths_today': "{}".format(today['deathIncrease'].astype(int))
+    }
+    file_name = get_directory(_base_directory, state, '{state}_today_stats.json'.format(state=state))
+    with open(file_name, 'w') as outfile:
+        json.dump(today_stats, outfile)
 
 
 def subset_state(state, df):
@@ -66,6 +88,8 @@ def plot_state_data(state, df, roll=7):
 
     max_date = str(stat['date'].max()).split(" ")[0]
     print("Latest usable data from: {}".format(max_date))
+
+    get_today_stats(stat, state)
 
     # cumulative cases
     plt.plot(stat['date'], stat['positive'])
