@@ -134,7 +134,7 @@ def plot_state_data(state, df, roll=7):
 
     # new cases
     fig, ax1 = plt.subplots()
-    ax1.set_ylabel("{state} New Cases ({roll}-day rolling mean)".format(state=state, roll=roll))
+    ax1.set_ylabel("New Cases")
     ax1.set_xlabel("Date\nThrough {}".format(max_date))
     ax1.plot(stat['date'], stat['positiveIncrease'].rolling(roll).mean(), c='r')
     ax1.plot(stat['date'], stat['positiveIncrease'], c='r', alpha=.25)
@@ -142,6 +142,7 @@ def plot_state_data(state, df, roll=7):
     ax2.set_ylabel('Cases per 100,000')
     ax2.plot(stat['date'], stat['positiveIncrease'] / stat['100thou'], alpha=0)
     plt.gcf().autofmt_xdate()
+    plt.title("{state} New Cases ({roll}-day rolling mean)".format(state=state, roll=roll))
     fig.tight_layout()
     figure_name = get_directory(_base_directory, state, '{state}_new_cases_per_day.png'.format(state=state))
 
