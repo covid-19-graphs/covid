@@ -1,4 +1,4 @@
-from pandas import read_csv
+from pandas import read_csv, merge
 import matplotlib.pyplot as plt
 from datetime import datetime
 from matplotlib.dates import date2num
@@ -21,6 +21,17 @@ def get_directory(directory_path, state, filename):
     if not isdir(directory_path):
         mkdir(directory_path)
     return join(directory_path, filename)
+
+
+def pull_all():
+    stat = read_csv("https://covidtracking.com/api/v1/states/daily.csv")
+    pop = read_csv(
+        "https://raw.githubusercontent.com/TheEconomist/covid-19-excess-deaths-tracker/master/source-data/united-states/united_states_states.csv", )
+
+    stat = merge(stat, pop, left_on='state', right_on='state_code')
+    stat['100thou'] = stat['population'] / 100000
+
+    return stat
 
 
 def get_today_stats(stat, state):
@@ -122,14 +133,20 @@ def plot_state_data(state, df, roll=7):
     plt.clf()
 
     # new cases
-    plt.plot(stat['date'], stat['positiveIncrease'].rolling(roll).mean(), c='r')
-    plt.plot(stat['date'], stat['positiveIncrease'], c='r', alpha=.25)
+    fig, ax1 = plt.subplots()
+    ax1.set_ylabel("{state} New Cases ({roll}-day rolling mean)".format(state=state, roll=roll))
+    ax1.set_xlabel("Date\nThrough {}".format(max_date))
+    ax1.plot(stat['date'], stat['positiveIncrease'].rolling(roll).mean(), c='r')
+    ax1.plot(stat['date'], stat['positiveIncrease'], c='r', alpha=.25)
+    ax2 = ax1.twinx()
+    ax2.set_ylabel('Cases per 100,000')
+    ax2.plot(stat['date'], stat['positiveIncrease'] / stat['100thou'], alpha=0)
     plt.gcf().autofmt_xdate()
-    plt.title("{state} New Cases per Day ({roll}-day rolling mean)".format(state=state, roll=roll))
-    plt.xlabel("Date\nThrough {}".format(max_date))
-    plt.ylabel("New Cases")
+    fig.tight_layout()
     figure_name = get_directory(_base_directory, state, '{state}_new_cases_per_day.png'.format(state=state))
-    plt.savefig(fname=figure_name, format='png')
+
+    fig.savefig(fname=figure_name, format='png')
+    plt.close(fig)
     plt.clf()
 
     # new tests
@@ -215,7 +232,8 @@ def run_job():
         'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'USA'
     ]
     # get state data
-    all_state_data = read_csv(r"https://covidtracking.com/api/v1/states/daily.csv")
+    # all_state_data = read_csv(r"https://covidtracking.com/api/v1/states/daily.csv")
+    all_state_data = pull_all()
     for state in state_list:
         plot_state_data(state, all_state_data)
     print("Finished at {}".format(datetime.now()))
