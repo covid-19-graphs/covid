@@ -1,1 +1,1 @@
-{"latest_date": "2020-12-31", "total_tests": "4214182", "total_cases": "315275", "total_deaths": "7488", "tests_today": "29414", "new_cases_today": "4046", "ratio_today": "13.76%", "hospitalized": "1731", "in_icu": "-9223372036854775808", "on_ventilator": "202", "deaths_today": "40"}
+{"latest_date": "2021-01-01", "total_tests": "4214182", "total_cases": "315275", "total_deaths": "7488", "tests_today": "0", "new_cases_today": "0", "ratio_today": "nan%", "hospitalized": "1731", "in_icu": "-9223372036854775808", "on_ventilator": "202", "deaths_today": "0"}
